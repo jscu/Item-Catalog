@@ -1,4 +1,6 @@
 from flask import Flask, render_template
+from init_db import db_session as session
+from models import *
 
 app = Flask(__name__)
 
@@ -6,7 +8,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template(
+        'index.html', 
+        categories=session.query(Category).all(), 
+        items=session.query(Item).all()
+        )
 
 @app.route('/catalog/<string:category_name>/items')
 def show_category_items(category_name):

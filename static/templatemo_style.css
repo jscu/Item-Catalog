@@ -32,7 +32,7 @@ ul.sidebar_menu { padding: 4px 0px; }
 .container{ max-width: 980px; margin: 0 auto; background: #FDF5E3; }
 .thumbnail { display: inline-block;	-webkit-transition: none; transition: none; }
 
-.item { margin-bottom: 18px; max-width: 180px; width: 160px; }
+.item { margin-bottom: 18px; }
 .item img {	width: 140px; height: 140px; margin: 5px; }
 .item p { text-align: center; }
 .item_container { margin: 0 auto; }

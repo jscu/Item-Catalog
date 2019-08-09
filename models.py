@@ -1,9 +1,6 @@
+from init_db import Base
 from sqlalchemy import Column, Integer, String, create_engine, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-
-engine = create_engine('sqlite:///:memory:', echo=True)
-Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
@@ -38,6 +35,3 @@ class Item(Base):
 
     def __repr__(self):
         return "<Item(name='%s', description='%s')>" % (self.name, self.description)
-
-
-Base.metadata.create_all(engine)
