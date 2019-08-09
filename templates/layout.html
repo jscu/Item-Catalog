@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>		
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Catalog App</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+	<link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
+	<link href="{{ url_for('static', filename='templatemo_style.css') }}" rel="stylesheet" type="text/css">
+
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-default" role="navigation"> 
+				<div style="display: inline-block; float: left">
+					<a href="#" style="font-size: 30px">Catalog App</a>
+				</div>
+				<div style="display: inline-block; float: right; margin-top: 10px">
+					<a><button class="btn btn-outline-primary" type="submit">Login</button></a>
+				</div>
+			</nav>
+		</header>
+		<div class="container" id="home">
+			<div class="row row-offcanvas row-offcanvas-left">
+				<div class="col col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">	
+                			
+					<div class="sidebar-nav">
+                    
+						<h4>Categories</h4>
+						<ul class="sidebar_menu">
+                        	<li><a href="#">website templates</a></li>
+							<li><a href="#">flash templates</a></li>
+                            <li><a href="#">koflash gallery</a></li>
+							<li><a href="#">templatemo site</a></li>
+                            <li><a href="#">flash stuffs</a></li>
+						</ul>
+					</div>
+                    
+                </div> 
+                {% block content %}
+                {% endblock %}
+			</div>
+		</div>
+	</body>
+</html>
