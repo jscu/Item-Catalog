@@ -181,3 +181,8 @@ ul.sidebar_menu { padding: 4px 0px; }
 	color: white;
 }
 /* minimalmonkey */
+
+.delete-form {
+	margin-top: 0px;
+	padding-left: 10px;
+}

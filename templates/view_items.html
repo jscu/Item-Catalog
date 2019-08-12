@@ -4,16 +4,15 @@
 	<section class="row" id="website_templates">				
 		<div class="row">
 			<div class="col-xs-12 col-md-12">
-				<h3>Snowboarding Items (2 items)</h3>
+				<h3>{{category.name}} Items ({{num_of_items}} items)</h3>
 			</div>
 		</div>
 			<div class="col-xs-12 col-md-12" style="padding-left: 20px">
-					<div class="item">
-						Blue Tech
-					</div>		          
-					<div class="item">
-						Secured
-					</div>
+				{% for item in items %}
+					<a class="item" href="{{ url_for('show_category_individual_item', category_name=item.category.name, item_name=item.name)}}">
+						{{item.name}}
+					</a>		          
+				{% endfor %}
 				</div>
 	</section>
 </div>

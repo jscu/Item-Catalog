@@ -4,10 +4,11 @@
 	<section class="row" id="website_templates">				
 		<div class="row">
 			<div class="col-xs-12 col-md-12">
-				<h3>Snowboarding</h3>
+				<h3>{{category_name}}</h3>
 			</div>
         </div>
-        <p style="padding-left: 20px">Description: HIHIHI k</p>
+        <p style="padding-left: 20px">Description: {{item.description}}</p>
+        <p style="padding-left: 20px"><a href="{{ url_for('edit_item', item_name=item.name)}}">Edit</a> | <a href="{{ url_for('delete_item', item_name=item.name)}}">Delete</a></p>
 	</section>
 </div>
 {% endblock %}

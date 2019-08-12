@@ -19,6 +19,13 @@ class Category(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship("User")
 
+    @property
+    def serialize(self):
+        return {
+    'id': self.id,
+    'name': self.name
+        }
+
     def __repr__(self):
         return "<Category(name='%s')>" % (self.name)
 

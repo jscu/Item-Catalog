@@ -9,17 +9,16 @@
         </div>
         <form method="POST">
             Title:<br>
-            <input type="text" name="title" value="Mickey">
+            <input type="text" name="title" value="{{item.name}}">
             <br>
             Description:<br>
-            <input type="text" name="description" value="Mouse">
+            <input type="text" name="description" value="{{item.description}}">
             <br>
             Category:<br>
             <select name="categorylist">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                {% for category in categories %}
+                <option value="{{category.name}}">{{category.name}}</option>
+                {% endfor %}
             </select>
             <br><br>
             <input type="submit" value="Submit">
