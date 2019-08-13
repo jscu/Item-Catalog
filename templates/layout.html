@@ -16,7 +16,7 @@
 		<header>
 			<nav class="navbar navbar-default" role="navigation"> 
 				<div style="display: inline-block; float: left">
-					<a href="#" style="font-size: 30px">Catalog App</a>
+					<a href="{{ url_for('home')}}" style="font-size: 30px">Catalog App</a>
 				</div>
 				<div style="display: inline-block; float: right; margin-top: 10px">
 					<a><button class="btn btn-outline-primary" type="submit">Login</button></a>
@@ -25,19 +25,22 @@
 		</header>
 		<div class="container" id="home">
 			<div class="row row-offcanvas row-offcanvas-left">
+				{% block navbar %}
 				<div class="col col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">	
                 			
 					<div class="sidebar-nav">
-                    
+				    {% block modifycat %}
+				    {% endblock %}
 						<h4>Categories</h4>
 						<ul class="sidebar_menu">
 							{% for category in categories %}
-                        	<li><a href="{{ url_for('show_category_items', category_id=category.id)}}">{{category.name}}</a></li>
+                        	<li><a href="{{ url_for('show_category_items', category_name=category.name)}}">{{category.name}}</a></li>
 							{% endfor %}
 						</ul>
 					</div>
                     
                 </div> 
+                {% endblock %}
                 {% block content %}
                 {% endblock %}
 			</div>

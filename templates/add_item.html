@@ -1,25 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="col col-xs-12 col-sm-9">
-	<section class="row" id="website_templates">				
+	<section class="row" id="website_templates" style="padding-left: 30px">				
 		<div class="row">
-			<div class="col-xs-12 col-md-12">
-				<h3>Add Item</h3>
-			</div>
+            <h3>Add Item</h3>
         </div>
         <form method="POST">
             Title:<br>
-            <input type="text" name="title">
+            <input type="text" name="title" value="">
             <br>
             Description:<br>
-            <input type="text" name="description">
+            <input type="text" name="description" value="">
             <br>
             Category:<br>
             <select name="categorylist">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
+                {% for category in categories %}
+                <option value="{{category.name}}">{{category.name}}</option>
+                {% endfor %}
             </select>
             <br><br>
             <input type="submit" value="Submit">
@@ -27,3 +24,5 @@
 	</section>
 </div>
 {% endblock %}
+{% block navbar %}
+{% endblock navbar %}

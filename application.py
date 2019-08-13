@@ -5,7 +5,6 @@ from models import *
 app = Flask(__name__)
 
 
-
 @app.route('/')
 def home():
     return render_template(
@@ -14,10 +13,10 @@ def home():
         items=session.query(Item).all()
         )
 
-@app.route('/catalog/<int:category_id>/items')
-def show_category_items(category_id):
-    category = session.query(Category).filter_by(id=category_id).first() 
-    items = session.query(Item).filter_by(category_id=category_id).all()
+@app.route('/catalog/<string:category_name>/items')
+def show_category_items(category_name):
+    category = session.query(Category).filter_by(name=category_name).first() 
+    items = session.query(Item).filter_by(category_id=category.id).all()
     return render_template(
         'view_items.html',
         items=items,
@@ -30,17 +29,32 @@ def show_category_individual_item(category_name, item_name):
     item = session.query(Item).filter_by(name=item_name).first()
     return render_template('view_individual_item.html',category_name=category_name, item=item)
 
+@app.route('/catalog/category/add')
+def add_category():
+    return render_template('add_category.html')
+
+@app.route('/catalog/category/<string:category_name>/edit')
+def edit_category(category_name):
+    category = session.query(Category).filter_by(name=category_name).first()
+    return render_template('edit_category.html', category_name=category.name)
+
+@app.route('/catalog/category/<string:category_name>/delete')
+def delete_category(category_name):
+    category = session.query(Category).filter_by(name=category_name).first()
+    return render_template('delete_category.html')
+
 @app.route('/catalog/item/add')
 def add_item():
-    return render_template('add_item.html')
+    categories = session.query(Category).all()
+    return render_template('add_item.html', categories=categories)
 
-@app.route('/catalog/<string:item_name>/edit')
+@app.route('/catalog/item/<string:item_name>/edit')
 def edit_item(item_name):
     item = session.query(Item).filter_by(name=item_name).first()
     categories = session.query(Category).all()
     return render_template('edit_item.html', item=item, categories=categories)
 
-@app.route('/catalog/<string:item_name>/delete')
+@app.route('/catalog/item/<string:item_name>/delete')
 def delete_item(item_name):
     item = session.query(Item).filter_by(name=item_name).first()
     return render_template('delete_item.html', item=item)

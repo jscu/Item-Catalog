@@ -1,11 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="col col-xs-12 col-sm-9">
-	<section class="row" id="website_templates">				
+	<section class="row" id="website_templates" style="padding-left: 30px">				
 		<div class="row">
-			<div class="col-xs-12 col-md-12">
-				<h3>Edit Item</h3>
-			</div>
+            <h3>Edit Item</h3>
         </div>
         <form method="POST">
             Title:<br>
@@ -26,3 +24,5 @@
 	</section>
 </div>
 {% endblock %}
+{% block navbar %}
+{% endblock navbar %}

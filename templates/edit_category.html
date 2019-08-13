@@ -3,12 +3,12 @@
 <div class="col col-xs-12 col-sm-9">
 	<section class="row" id="website_templates" style="padding-left: 30px">				
 		<div class="row">
-            <h3>Delete Item</h3>
+            <h3>Edit Category</h3>
         </div>
-        <form method="POST" class="delete-form">
-            <p>
-                Are you sure you want to delete?
-            </p>
+        <form method="POST">
+            Name:<br>
+            <input type="text" name="title" value="{{category_name}}">
+            <br><br>
             <input type="submit" value="Submit">
         </form> 
 	</section>

@@ -23,7 +23,8 @@ class Category(Base):
     def serialize(self):
         return {
     'id': self.id,
-    'name': self.name
+    'name': self.name,
+    'Item': [i.serialize for i in self.user.item]
         }
 
     def __repr__(self):
@@ -39,6 +40,15 @@ class Item(Base):
     category = relationship("Category")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship("User")
+
+    @property
+    def serialize(self):
+        return {
+    'cat_id': self.category_id,
+    'description': self.description,
+    'id': self.id,
+    'title': self.name
+        }
 
     def __repr__(self):
         return "<Item(name='%s', description='%s')>" % (self.name, self.description)

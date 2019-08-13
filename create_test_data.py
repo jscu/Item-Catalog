@@ -12,12 +12,13 @@ if __name__ == '__main__':
     db_session.add(user)
     db_session.commit()
 
-    category = Category(
-        name='Basketball',
-        user=user
-    )
+    for cat in ['Soccer', 'Baseball', 'Frisbee', 'Snowboarding', 'Rock Climbing', 'Foosball', 'Skating', 'Hockey', 'Basketball']:
+        category = Category(
+            name=cat,
+            user=user
+        )
 
-    db_session.add(category)
+        db_session.add(category)
     db_session.commit()
 
     item = Item(
