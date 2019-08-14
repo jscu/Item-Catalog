@@ -29,12 +29,10 @@
 				<div class="col col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">	
                 			
 					<div class="sidebar-nav">
-				    {% block modifycat %}
-				    {% endblock %}
 						<h4>Categories</h4>
 						<ul class="sidebar_menu">
 							{% for category in categories %}
-                        	<li><a href="{{ url_for('show_category_items', category_name=category.name)}}">{{category.name}}</a></li>
+							<li><a href="{{ url_for('show_category_items', category_name=category.name)}}">{{category.name}}</a></li>
 							{% endfor %}
 						</ul>
 					</div>

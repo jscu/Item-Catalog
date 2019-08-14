@@ -7,6 +7,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
+    category = relationship('Category', backref='user')
+    item = relationship('Item', backref='user')
 
     def __repr__(self):
         return "<User(name='%s', email='%s')>" % (self.name, self.email)
@@ -16,15 +18,15 @@ class Category(Base):
     __tablename__ = 'category'
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
+    item = relationship("Item", backref='category')
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship("User")
 
     @property
     def serialize(self):
         return {
     'id': self.id,
     'name': self.name,
-    'Item': [i.serialize for i in self.user.item]
+    'Item': [i.serialize for i in self.item]
         }
 
     def __repr__(self):
@@ -37,9 +39,7 @@ class Item(Base):
     name = Column(String(100), nullable=False)
     description = Column(String(200))
     category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship("Category")
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship("User")
 
     @property
     def serialize(self):
