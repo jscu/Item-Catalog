@@ -19,7 +19,11 @@
 					<a href="{{ url_for('home')}}" style="font-size: 30px">Catalog App</a>
 				</div>
 				<div style="display: inline-block; float: right; margin-top: 10px">
-					<a><button class="btn btn-outline-primary" type="submit">Login</button></a>
+					{% if not is_user_logged_in %}
+						<a href="{{ url_for('login')}}"><button class="btn btn-outline-primary" type="submit">Login</button></a>
+					{% else %}
+						<a href="{{ url_for('logout')}}"><button class="btn btn-outline-primary" type="submit">Logout</button></a>
+					{% endif %}
 				</div>
 			</nav>
 		</header>
@@ -38,7 +42,16 @@
 					</div>
                     
                 </div> 
-                {% endblock %}
+				{% endblock %}
+				{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					<div class=flashes>
+					{% for message in messages %}
+					<p><b style="padding-left: 20px">{{ message }}</b></p>
+					{% endfor %}
+					</div>
+				{% endif %}
+				{% endwith %}
                 {% block content %}
                 {% endblock %}
 			</div>

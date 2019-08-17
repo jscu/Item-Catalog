@@ -2,11 +2,13 @@
 {% block content %}
 				<div class="col col-xs-12 col-sm-9">
                     <section class="row" id="website_templates">				
-						<div class="col-xs-12 col-md-12" style="padding-left: 20px">
-							<a class="item" href="{{ url_for('add_item')}}">
-								Add Item
-							</a>
-						</div>
+						{% if is_user_logged_in %}
+							<div class="col-xs-12 col-md-12" style="padding-left: 20px">
+								<a class="item" href="{{ url_for('add_item')}}">
+									Add Item
+								</a>
+							</div>
+							{% endif %}
 						<div class="row">
 							<div class="col-xs-12 col-md-12">
 								<h3>Latest Items</h3>
