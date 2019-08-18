@@ -24,9 +24,9 @@ class Category(Base):
     @property
     def serialize(self):
         return {
-    'id': self.id,
-    'name': self.name,
-    'Item': [i.serialize for i in self.item]
+            'id': self.id,
+            'name': self.name,
+            'Item': [item.serialize for item in self.item]
         }
 
     def __repr__(self):
@@ -44,10 +44,10 @@ class Item(Base):
     @property
     def serialize(self):
         return {
-    'cat_id': self.category_id,
-    'description': self.description,
-    'id': self.id,
-    'title': self.name
+            'cat_id': self.category_id,
+            'description': self.description,
+            'id': self.id,
+            'title': self.name
         }
 
     def __repr__(self):

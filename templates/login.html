@@ -1,124 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head> -->
-
-  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-   <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"> -->
-  <!-- </script> -->
-
-<!-- <script src="//apis.google.com/js/platform.js?onload=start"> </script> -->
-<!-- <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer> </script> -->
-
-
-<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
-
-
-<!-- </head> -->
-
-
-<!-- <body>   -->
-
-
-<!-- GOOGLE PLUS SIGN IN-->
-
-          
-          <!-- <div id="signinButton">
-          <span class="g-signin"
-            data-scope="openid email"
-            data-clientid="964360491572-fpq2bccdugoprfhoqoq12hjcs7ke35dq.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
-            data-approvalprompt="force">
-          </span>
-        </div>
-
-<div id="result"></div> -->
-
-<!-- <script>
-function signInCallback(authResult) {
-  if (authResult['code']) {
-    // Hide the sign-in button now that the user is authorized
-    $('#signinButton').attr('style', 'display: none');
-    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
-    $.ajax({
-      type: 'POST',
-      url: '/gconnect?state={{STATE}}',
-      processData: false,
-      data: authResult['code'],
-      contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result) {
-        // Handle or verify the server response if necessary.
-        if (result) {
-          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-         setTimeout(function() {
-          window.location.href = "/index";
-         }, 4000);
-          
-      } else if (authResult['error']) {
-    console.log('There was an error: ' + authResult['error']);
-  } else {
-        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-         }
-      }
-      
-  }); } }
-</script> -->
-
-
-
-<!--END GOOGLE PLUS SIGN IN -->
-
-  <!-- </body> -->
-
-  <!-- </html> -->
-<!-- <html lang="en">
-  <head>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="964360491572-fpq2bccdugoprfhoqoq12hjcs7ke35dq.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-  </head>
-  <body>
-    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    <script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        console.log(googleUser)
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-
-        $.ajax({
-          type: 'POST',
-          url: '/gconnect?state={{STATE}}',
-          processData: false,
-          // data: authResult['code'],
-          data: profile.id_token,
-          contentType: 'application/octet-stream; charset=utf-8',
-          success: function(result) {
-            // Handle or verify the server response if necessary.
-            if (result) {
-              $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-            setTimeout(function() {
-              window.location.href = "/index";
-            }, 4000);
-          }
-        }
-      })}
-    </script>
-    <div id="result"></div>
-  </body>
-</html> -->
-
 <html>
   <head>
     <meta name="google-signin-scope" content="profile email openid">
@@ -129,48 +8,41 @@ function signInCallback(authResult) {
 
   <body>
     <script>
-function signInCallback(authResult) {
-  console.log(authResult)
-  if (authResult['code']) {
-    // Hide the sign-in button now that the user is authorized
-    // $('#signinButton').attr('style', 'display: none');
-    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
-    $.ajax({
-      type: 'POST',
-      url: '/gconnect?state={{STATE}}',
-      processData: false,
-      data: authResult['code'],
-      contentType: 'application/octet-stream; charset=utf-8',
-      success: function(result) {
-        // Handle or verify the server response if necessary.
-        if (result) {
-          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-         setTimeout(function() {
-          window.location.href = "/";
-         }, 4000);
-          
-      } else if (authResult['error']) {
-    console.log('There was an error: ' + authResult['error']);
-  } else {
-        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-         }
+      function signInCallback(authResult) {
+        if (authResult['code']) {
+          $.ajax({
+            type: 'POST',
+            url: '/gconnect?state={{ STATE }}',
+            processData: false,
+            data: authResult['code'],
+            contentType: 'application/octet-stream; charset=utf-8',
+            success: function(result) {
+              // Handle or verify the server response if necessary.
+              if (result) {
+                $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+              setTimeout(function() {
+                window.location.href = "/";
+              }, 4000);
+              } else if (authResult['error']) {
+                console.log('There was an error: ' + authResult['error']);
+              } else {
+                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+              }
+            }
+          }); 
+        }
       }
-      
-  }); } }
+
       function init() {
         gapi.load('auth2', function() {
-          /* Ready. Make a call to gapi.auth2.init or some other API */
           auth2 = gapi.auth2.init({
             client_id: '964360491572-fpq2bccdugoprfhoqoq12hjcs7ke35dq.apps.googleusercontent.com',
             scope: 'profile email openid'
           });
-        auth2.grantOfflineAccess().then(signInCallback);
+          auth2.grantOfflineAccess().then(signInCallback);
         });
       }
-
-
     </script>
     <div id="result"></div>
   </body>
-
 </html>

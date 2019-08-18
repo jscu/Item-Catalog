@@ -1,12 +1,12 @@
-from models import User, Base, Item, Category
+from models import User, Item, Category
 from init_db import init_db, db_session
 
 if __name__ == '__main__':
     init_db()
 
     user = User(
-        name='Justin',
-        email='justin.sou@gmail.com',
+        name='Justin Sou',
+        email='jscu14@gmail.com',
     )
 
     db_session.add(user)

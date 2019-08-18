@@ -16,13 +16,13 @@
 		<header>
 			<nav class="navbar navbar-default" role="navigation"> 
 				<div style="display: inline-block; float: left">
-					<a href="{{ url_for('home')}}" style="font-size: 30px">Catalog App</a>
+					<a href="{{ url_for('home') }}" style="font-size: 30px">Catalog App</a>
 				</div>
 				<div style="display: inline-block; float: right; margin-top: 10px">
 					{% if not is_user_logged_in %}
-						<a href="{{ url_for('login')}}"><button class="btn btn-outline-primary" type="submit">Login</button></a>
+						<a href="{{ url_for('login') }}"><button class="btn btn-outline-primary" type="submit">Login</button></a>
 					{% else %}
-						<a href="{{ url_for('logout')}}"><button class="btn btn-outline-primary" type="submit">Logout</button></a>
+						<a href="{{ url_for('logout') }}"><button class="btn btn-outline-primary" type="submit">Logout</button></a>
 					{% endif %}
 				</div>
 			</nav>
@@ -31,23 +31,21 @@
 			<div class="row row-offcanvas row-offcanvas-left">
 				{% block navbar %}
 				<div class="col col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">	
-                			
 					<div class="sidebar-nav">
 						<h4>Categories</h4>
 						<ul class="sidebar_menu">
 							{% for category in categories %}
-							<li><a href="{{ url_for('show_category_items', category_name=category.name)}}">{{category.name}}</a></li>
+							<li><a href="{{ url_for('show_category_items', category_name=category.name) }}">{{ category.name }}</a></li>
 							{% endfor %}
 						</ul>
 					</div>
-                    
                 </div> 
 				{% endblock %}
 				{% with messages = get_flashed_messages() %}
 				{% if messages %}
 					<div class=flashes>
 					{% for message in messages %}
-					<p><b style="padding-left: 20px">{{ message }}</b></p>
+						<p><b style="padding-left: 20px">{{ message }}</b></p>
 					{% endfor %}
 					</div>
 				{% endif %}

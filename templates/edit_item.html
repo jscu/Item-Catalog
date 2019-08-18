@@ -7,15 +7,15 @@
         </div>
         <form method="POST">
             Title:<br>
-            <input type="text" name="title" value="{{item.name}}">
+            <input type="text" name="title" value="{{ item.name }}">
             <br>
             Description:<br>
-            <input type="text" name="description" value="{{item.description}}">
+            <input type="text" name="description" value="{{ item.description }}">
             <br>
             Category:<br>
             <select name="category">
                 {% for category in categories %}
-                <option value="{{category.name}}">{{category.name}}</option>
+                <option value="{{ category.name }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
             <br><br>

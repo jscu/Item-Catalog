@@ -1,26 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-				<div class="col col-xs-12 col-sm-9">
-                    <section class="row" id="website_templates">				
-						{% if is_user_logged_in %}
-							<div class="col-xs-12 col-md-12" style="padding-left: 20px">
-								<a class="item" href="{{ url_for('add_item')}}">
-									Add Item
-								</a>
-							</div>
-							{% endif %}
-						<div class="row">
-							<div class="col-xs-12 col-md-12">
-								<h3>Latest Items</h3>
-							</div>
-						</div>
-							<div class="col-xs-12 col-md-12" style="padding-left: 20px">
-								{% for item in items %}
-									<div><a class="item" href="{{ url_for('show_category_individual_item', category_name=item.category.name, item_name=item.name)}}">
-										{{item.name}} 
-									</a><i>({{item.category.name}})</i></div>
-								{% endfor %}
-							</div>
-					</section>
-				</div>
+<div class="col col-xs-12 col-sm-9">
+	<section class="row" id="website_templates">				
+		{% if is_user_logged_in %}
+			<div class="col-xs-12 col-md-12" style="padding-left: 20px">
+				<a class="item" href="{{ url_for('add_item') }}">
+					Add Item
+				</a>
+			</div>
+		{% endif %}
+		<div class="row">
+			<div class="col-xs-12 col-md-12">
+				<h3>Latest Items</h3>
+			</div>
+		</div>
+			<div class="col-xs-12 col-md-12" style="padding-left: 20px">
+				{% for item in items %}
+					<div><a class="item" href="{{ url_for('show_category_individual_item', category_name=item.category.name, item_name=item.name) }}">
+						{{ item.name }} 
+					</a><i>({{ item.category.name }})</i></div>
+				{% endfor %}
+			</div>
+	</section>
+</div>
 {% endblock %}
