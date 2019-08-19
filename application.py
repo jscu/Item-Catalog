@@ -105,8 +105,8 @@ def show_category_individual_item(category_name, item_name):
 @app.route('/catalog/item/add', methods=['GET', 'POST'])
 def add_item():
     if 'username' not in login_session:
-        flash('You have not logged in yet. Redirected you to login page')
-        redirect('/login')
+        flash('You have not logged in yet. Cannot create item without logging in')
+        return redirect(url_for('home'))
 
     categories = get_all_categories()
 
@@ -150,8 +150,8 @@ def add_item():
 @app.route('/catalog/item/<string:item_name>/edit', methods=['GET', 'POST'])
 def edit_item(item_name):
     if 'username' not in login_session:
-        flash('You have not logged in yet. Redirected you to login page')
-        redirect('/login')
+        flash('You have not logged in yet. Cannot edit item without logging in')
+        return redirect(url_for('home'))
 
     # Get the first matched item by item name, if any
     item = get_items_by_filters_or_default(name=item_name)[0]
@@ -197,8 +197,8 @@ def edit_item(item_name):
 @app.route('/catalog/item/<string:item_name>/delete', methods=['GET', 'POST'])
 def delete_item(item_name):
     if 'username' not in login_session:
-        flash('You have not logged in yet. Redirected you to login page')
-        redirect('/login')
+        flash('You have not logged in yet. Cannot delete item without logging in')
+        return redirect(url_for('home'))
 
     # Get the first matched item by item name, if any
     item = get_items_by_filters_or_default(name=item_name)[0]
