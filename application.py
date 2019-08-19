@@ -1,5 +1,7 @@
-from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, make_response, session as login_session
-import random, string
+from flask import Flask, render_template, jsonify, request, flash
+from falsk import redirect, url_for, make_response, session as login_session
+import random
+import string
 from init_db import db_session as session
 from models import *
 
@@ -9,35 +11,47 @@ import json
 import requests
 
 app = Flask(__name__)
-app.secret_key = json.loads(open('client_secrets.json', 'r').read())['web']['client_secret'] 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+json_content = open('client_secrets.json', 'r').read()
+app.secret_key = json.loads(json_content)['web']['client_secret']
+CLIENT_ID = json.loads(json_content)['web']['client_id']
+
 
 def is_user_logged_in():
     return 'username' in login_session
 
+
 def is_item_owner(item):
-    return item.user.name == login_session.get('username') and item.user.email == login_session.get('email')
+    return item.user.name == login_session.get('username') \
+        and item.user.email == login_session.get('email')
+
 
 def get_all_categories():
-    return session.query(Category).all() 
+    return session.query(Category).all()
+
 
 def get_all_items():
     return session.query(Item).all()
 
+
 def get_all_users():
     return session.query(User).all()
+
 
 def get_categories_by_filters(**args):
     return session.query(Category).filter_by(**args).all()
 
+
 def get_items_by_filters(**args):
     return session.query(Item).filter_by(**args).all()
+
 
 def get_user_by_filters(**args):
     return session.query(User).filter_by(**args).first()
 
+
 def get_categories_by_filters_or_default(**args):
     return get_categories_by_filters(**args) or [None]
+
 
 def get_items_by_filters_or_default(**args):
     return get_items_by_filters(**args) or [None]
@@ -47,11 +61,12 @@ def get_items_by_filters_or_default(**args):
 @app.route('/index.html')
 def home():
     return render_template(
-        'index.html', 
+        'index.html',
         categories=get_all_categories(),
         items=get_all_items(),
         is_user_logged_in=is_user_logged_in()
     )
+
 
 @app.route('/catalog/<string:category_name>/items')
 def show_category_items(category_name):
@@ -61,7 +76,7 @@ def show_category_items(category_name):
 
     if not category:
         flash('Category {} does not exist'.format(category_name))
-        category_name=None
+        category_name = None
     else:
         items = get_items_by_filters(category_id=category.id)
 
@@ -74,6 +89,7 @@ def show_category_items(category_name):
         is_user_logged_in=is_user_logged_in()
     )
 
+
 @app.route('/catalog/<string:category_name>/<string:item_name>')
 def show_category_individual_item(category_name, item_name):
     # Get the first matched category, if any
@@ -83,11 +99,11 @@ def show_category_individual_item(category_name, item_name):
 
     if not category:
         flash('Category {} does not exist'.format(category_name))
-        category_name=None
+        category_name = None
     else:
         # Get the first matched item, if any
         item = get_items_by_filters_or_default(name=item_name)[0]
-        
+
         if not item:
             flash('Item {} does not exist'.format(item_name))
         else:
@@ -96,32 +112,41 @@ def show_category_individual_item(category_name, item_name):
 
     return render_template(
         'view_individual_item.html',
-        category_name=category_name, 
+        category_name=category_name,
         item=item,
         is_editable_item=is_editable_item,
         is_user_logged_in=is_user_logged_in()
     )
 
+
 @app.route('/catalog/item/add', methods=['GET', 'POST'])
 def add_item():
     if 'username' not in login_session:
-        flash('You have not logged in yet. Cannot create item without logging in')
+        flash('You have not logged in. Cannot create item without logging in')
         return redirect(url_for('home'))
 
     categories = get_all_categories()
 
     if request.method == 'GET':
-        return render_template('add_item.html', categories=categories, is_user_logged_in=is_user_logged_in())
+        return render_template(
+            'add_item.html',
+            categories=categories,
+            is_user_logged_in=is_user_logged_in()
+            )
     elif request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
         category = request.form['category']
 
         if not(title and category):
-            return jsonify("Title and category are mandatory to create new item")
+            return jsonify(
+                "Title and category are mandatory to create new item"
+                )
         else:
             # Get all category and item names and check if new item exists
-            item_names = set(name for (name,) in session.query().with_entities(Item.name))
+            item_names = set(
+                name for (name,) in session.query().with_entities(Item.name)
+            )
             category_names = set(cat.name for cat in categories)
             if category not in category_names:
                 return jsonify("Category {} does not exist".format(category))
@@ -131,7 +156,9 @@ def add_item():
                 # Make sure current logged in user exists in database
                 user = get_user_by_filters(name=login_session['username'])
                 if not user:
-                    return jsonify("Cannot create new item with invalid user credentials")
+                    return jsonify(
+                        "Cannot create new item with invalid user credentials"
+                    )
 
                 item = Item(
                     name=title,
@@ -142,22 +169,30 @@ def add_item():
 
                 session.add(item)
                 session.commit()
-                flash('Item {} with category {} has been succesfully created'.format(title, category))
+                flash(
+                    'Item {} with category {} has been succesfully created'
+                    .format(title, category)
+                )
                 return redirect(url_for('home'))
     else:
         return jsonify("HTTP method is required to be GET or POST")
 
+
 @app.route('/catalog/item/<string:item_name>/edit', methods=['GET', 'POST'])
 def edit_item(item_name):
     if 'username' not in login_session:
-        flash('You have not logged in yet. Cannot edit item without logging in')
+        flash(
+            'You have not logged in yet. Cannot edit item without logging in'
+        )
         return redirect(url_for('home'))
 
     # Get the first matched item by item name, if any
     item = get_items_by_filters_or_default(name=item_name)[0]
 
     if not item:
-        return jsonify("Cannot edit item because item {} does not exist".format(item_name))
+        return jsonify(
+            "Cannot edit item because item {} does not exist".format(item_name)
+        )
 
     # Make sure current logged in user is the item owner
     if not is_item_owner(item):
@@ -165,7 +200,12 @@ def edit_item(item_name):
 
     categories = get_all_categories()
     if request.method == 'GET':
-        return render_template('edit_item.html', item=item, categories=categories, is_user_logged_in=is_user_logged_in())
+        return render_template(
+            'edit_item.html',
+            item=item,
+            categories=categories,
+            is_user_logged_in=is_user_logged_in()
+        )
     elif request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
@@ -175,7 +215,9 @@ def edit_item(item_name):
             return jsonify("Title and category are mandatory to edit item")
         else:
             # Get all category and item names and check if new item exists
-            item_names = set(name for (name,) in session.query().with_entities(Item.name))
+            item_names = set(
+                name for (name,) in session.query().with_entities(Item.name)
+            )
             category_names = set(cat.name for cat in categories)
             if category not in category_names:
                 return jsonify("Category {} does not exist".format(category))
@@ -185,40 +227,56 @@ def edit_item(item_name):
             else:
                 item.name = title
                 item.description = description
-                item.category = get_categories_by_filters_or_default(name=category)[0]
+                item.category = get_categories_by_filters_or_default(
+                    name=category)[0]
 
                 session.add(item)
                 session.commit()
-                flash('Item {} with category {} has been succesfully edited'.format(title, category))
+                flash(
+                    'Item {} with category {} has been succesfully edited'
+                    .format(title, category)
+                )
                 return redirect(url_for('home'))
     else:
         return jsonify("HTTP method is required to be GET or POST")
 
+
 @app.route('/catalog/item/<string:item_name>/delete', methods=['GET', 'POST'])
 def delete_item(item_name):
     if 'username' not in login_session:
-        flash('You have not logged in yet. Cannot delete item without logging in')
+        flash(
+            'You have not logged in yet. Cannot delete item without logging in'
+        )
         return redirect(url_for('home'))
 
     # Get the first matched item by item name, if any
     item = get_items_by_filters_or_default(name=item_name)[0]
 
     if not item:
-        return jsonify("Cannot delete item because item {} does not exist".format(item_name))
+        return jsonify(
+            "Cannot delete item because item {} does not exist"
+            .format(item_name)
+        )
 
     # Make sure current logged in user is the item owner
     if not is_item_owner(item):
         return jsonify("Cannot delete item with invalid credentials")
 
     if request.method == 'GET':
-        return render_template('delete_item.html', item=item, is_user_logged_in=is_user_logged_in())
+        return render_template(
+            'delete_item.html',
+            item=item,
+            is_user_logged_in=is_user_logged_in()
+        )
     elif request.method == 'POST':
         title = request.form['title']
 
         if not title:
             return jsonify("Cannot delete item without title")
         else:
-            item_names = set(name for (name,) in session.query().with_entities(Item.name))
+            item_names = set(
+                name for (name,) in session.query().with_entities(Item.name)
+            )
             if title not in item_names:
                 return jsonify("Item {} does not exist".format(title))
             else:
@@ -230,16 +288,21 @@ def delete_item(item_name):
     else:
         return jsonify("HTTP method is required to be GET or POST")
 
+
 @app.route('/catalog.json')
 def get_json():
     categories = get_all_categories()
     return jsonify(Category=[cat.serialize for cat in categories])
 
+
 @app.route('/login')
 def login():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
+    state = ''.join(
+        random.choice(string.ascii_uppercase + string.digits)
+        for x in range(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state)
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -293,8 +356,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps(
+            'Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -323,7 +386,6 @@ def gconnect():
 
         session.add(user)
         session.commit()
-        
 
     output = ''
     output += '<h1>Welcome, '
@@ -331,18 +393,23 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px; \
+    border-radius: 150px;-webkit-border-radius: 150px; \
+    -moz-border-radius: 150px;"> '
     flash("You are now logged in as %s" % login_session['username'])
     return output
+
 
 @app.route('/gdisconnect')
 def logout():
     access_token = login_session.get('access_token')
     if access_token is None:
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s'\
+        % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
@@ -354,9 +421,11 @@ def logout():
         flash('You are logged out succesfully')
         return redirect(url_for('home'))
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
