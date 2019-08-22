@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, flash
-from falsk import redirect, url_for, make_response, session as login_session
+from flask import redirect, url_for, make_response, session as login_session
 import random
 import string
 from init_db import db_session as session
